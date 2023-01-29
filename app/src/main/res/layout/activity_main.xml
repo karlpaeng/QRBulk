@@ -66,6 +66,7 @@
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center|top"
             app:layout_constraintTop_toBottomOf="@id/imageView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -74,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Image will be saved at the local storage \nAndroid/data/com.qrbulk.app/files/"
+        android:text="Image will be saved at the local storage \nAndroid/data/com.qrbulk.app/files/qrcode/"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/genFileBtn" />

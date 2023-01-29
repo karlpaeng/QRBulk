@@ -197,10 +197,12 @@ public class MainActivity extends AppCompatActivity {
 //        }
         //String dateNow = new SimpleDateFormat("-yyyyMMMdd-hhmmssa", Locale.getDefault()).format(new Date());
 
-        File filePath = new File(getApplicationContext().getExternalFilesDir(null) + "/qrbulk" + "-QR-" + qrTxt.getText().toString() + ".png");
+        File filePath = new File(getApplicationContext().getExternalFilesDir(null) + "/qrcode/qrbulk" + "-QR-" + qrTxt.getText().toString() + ".png");
+        File dir = new File(getApplicationContext().getExternalFilesDir(null) + "/qrcode");
+        dir.mkdirs();
         try {
             if(filePath.exists()) filePath.createNewFile();
-            else filePath = new File(getApplicationContext().getExternalFilesDir(null) + "/qrbulk" + "-QR-" + qrTxt.getText().toString() + ".png");
+            else filePath = new File(getApplicationContext().getExternalFilesDir(null) + "/qrcode/qrbulk" + "-QR-" + qrTxt.getText().toString() + ".png");
             FileOutputStream fileOutputStream = new FileOutputStream(filePath);
             bitmap.compress(Bitmap.CompressFormat.PNG,100,fileOutputStream);//
             if (fileOutputStream!=null){
@@ -244,8 +246,9 @@ public class MainActivity extends AppCompatActivity {
         sh = wb.getSheetAt(0);
         int rowNum = sh.getLastRowNum();
         qrList = new ArrayList<String>();
-        for (int q = 1 ; q <= rowNum ; q++) {
-            qrList.add("" + (int) Double.parseDouble(sh.getRow(q).getCell(0).toString()));
+        rowNum += 1;
+        for (int q = 0 ; q < rowNum ; q++) {
+            qrList.add(sh.getRow(q).getCell(0).toString());
         }
         Toast.makeText(MainActivity.this, "File selected with " + rowNum + " rows of data", Toast.LENGTH_SHORT).show();
         QrPlainTxt = qrList.get(0);
@@ -254,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void iterateList(){
 
-        for (int q = 1 ; q < qrList.size() ; q++) {
+        for (int q = 0 ; q < qrList.size() ; q++) {
             QrPlainTxt = qrList.get(q);
             w=q;
             qrTxt.setText(QrPlainTxt);
