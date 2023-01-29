@@ -60,15 +60,26 @@ public class MainActivity extends AppCompatActivity {
         genBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String text = editText.getText().toString().trim();
-                qrTxt.setText(text);
-                genQR(text);
+                if(editText.getText().toString().equals("")){
+                    Toast.makeText(MainActivity.this, "Please enter text first", Toast.LENGTH_SHORT).show();
+
+                }else {
+
+                    qrTxt.setText(editText.getText().toString());
+                    genQR(editText.getText().toString());
+                }
+
             }
         });
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveToGallery();
+                if(qrTxt.getText().toString().equals("")){
+                    Toast.makeText(MainActivity.this, "Please enter text first", Toast.LENGTH_SHORT).show();
+
+                }else {
+                    saveToGallery();
+                }
             }
         });
 
@@ -123,10 +134,10 @@ public class MainActivity extends AppCompatActivity {
 //        }
         String dateNow = new SimpleDateFormat("yyyyMMMdd-hhmmssa", Locale.getDefault()).format(new Date());
 
-        File filePath = new File(getApplicationContext().getExternalFilesDir(null) + "/amsbcc-" + dateNow + "-QR-" + editText.getText().toString() + ".png");
+        File filePath = new File(getApplicationContext().getExternalFilesDir(null) + "/amsbcc-" + dateNow + "-QR-" + qrTxt.getText().toString() + ".png");
         try {
             if(filePath.exists()) filePath.createNewFile();
-            else filePath = new File(getApplicationContext().getExternalFilesDir(null) + "/amsbcc-" + dateNow + "-QR-" + editText.getText().toString() + ".png");
+            else filePath = new File(getApplicationContext().getExternalFilesDir(null) + "/amsbcc-" + dateNow + "-QR-" + qrTxt.getText().toString() + ".png");
             FileOutputStream fileOutputStream = new FileOutputStream(filePath);
             bitmap.compress(Bitmap.CompressFormat.PNG,100,fileOutputStream);//
             if (fileOutputStream!=null){
