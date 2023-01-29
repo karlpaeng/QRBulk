@@ -62,18 +62,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String text = editText.getText().toString().trim();
                 qrTxt.setText(text);
-                MultiFormatWriter writer = new MultiFormatWriter();
-                try {
-                    BitMatrix matrix = writer.encode(text, BarcodeFormat.QR_CODE, 350, 350);
-                    BarcodeEncoder encoder = new BarcodeEncoder();
-                    Bitmap bitmap = encoder.createBitmap(matrix);
-                    imageView.setImageBitmap(bitmap);
-                    InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    manager.hideSoftInputFromWindow(editText.getApplicationWindowToken(), 0);
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+                genQR(text);
             }
         });
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +72,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+    private void genQR(String text){
+        MultiFormatWriter writer = new MultiFormatWriter();
+        try {
+            BitMatrix matrix = writer.encode(text, BarcodeFormat.QR_CODE, 350, 350);
+            BarcodeEncoder encoder = new BarcodeEncoder();
+            Bitmap bitmap = encoder.createBitmap(matrix);
+            imageView.setImageBitmap(bitmap);
+            InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(editText.getApplicationWindowToken(), 0);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     private void saveToGallery(){
 //        BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
