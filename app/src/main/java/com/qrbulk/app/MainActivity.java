@@ -42,6 +42,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -49,9 +50,9 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     ImageView imageView;
-    Button selFileBtn, genBtn;
+    Button selFileBtn, genBtn, useFileBtn;
     ConstraintLayout cl;
-    TextView qrTxt;
+    TextView qrTxt, filePathTV;
     String QrPlainTxt;
     //
     private static Workbook wb;
@@ -59,10 +60,14 @@ public class MainActivity extends AppCompatActivity {
     private static Row row;
     private static Cell cell;
 
+    int w;
+
     Uri studListUri;
     String filePath;
 
     private static final int CODE = 1001;
+
+    ArrayList<String> qrList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +85,11 @@ public class MainActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         selFileBtn = findViewById(R.id.selFileBtn);
         genBtn = findViewById(R.id.genFileBtn);
+        useFileBtn = findViewById(R.id.useFileBtn);
+
         cl = findViewById(R.id.qrLayout);
         qrTxt = findViewById(R.id.qrPlainTxt);
+        filePathTV = findViewById(R.id.filePath);
 
         selFileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +110,22 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        useFileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (filePath.equals("")){
+                    Toast.makeText(MainActivity.this, "Pls select an xlsx file first", Toast.LENGTH_SHORT).show();
+                }else{
+                    try {
+                        saveToList(MainActivity.this, studListUri);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(MainActivity.this, "FNF Exception", Toast.LENGTH_SHORT).show();
+                        Log.d("asduri:", e.toString());
+                    }
+                }
+            }
+        });
         genBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,14 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     //
                     //Toast.makeText(SelectFile.this, "selected", Toast.LENGTH_SHORT).show();
-                    try {
-                        iterateList(MainActivity.this, studListUri);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Toast.makeText(MainActivity.this, "FNF Exception", Toast.LENGTH_SHORT).show();
-                    }
-
-
+                    iterateList();
                 }
 //                if(qrTxt.getText().toString().equals("")){
 //                    Toast.makeText(MainActivity.this, "Please enter text first", Toast.LENGTH_SHORT).show();
@@ -178,12 +195,12 @@ public class MainActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //            Log.d("asd3:", e.toString());
 //        }
-        String dateNow = new SimpleDateFormat("yyyyMMMdd-hhmmssa", Locale.getDefault()).format(new Date());
+        //String dateNow = new SimpleDateFormat("-yyyyMMMdd-hhmmssa", Locale.getDefault()).format(new Date());
 
-        File filePath = new File(getApplicationContext().getExternalFilesDir(null) + "/amsbcc-" + dateNow + "-QR-" + qrTxt.getText().toString() + ".png");
+        File filePath = new File(getApplicationContext().getExternalFilesDir(null) + "/qrbulk" + "-QR-" + qrTxt.getText().toString() + ".png");
         try {
             if(filePath.exists()) filePath.createNewFile();
-            else filePath = new File(getApplicationContext().getExternalFilesDir(null) + "/amsbcc-" + dateNow + "-QR-" + qrTxt.getText().toString() + ".png");
+            else filePath = new File(getApplicationContext().getExternalFilesDir(null) + "/qrbulk" + "-QR-" + qrTxt.getText().toString() + ".png");
             FileOutputStream fileOutputStream = new FileOutputStream(filePath);
             bitmap.compress(Bitmap.CompressFormat.PNG,100,fileOutputStream);//
             if (fileOutputStream!=null){
@@ -209,16 +226,14 @@ public class MainActivity extends AppCompatActivity {
         //filePath = tempFile.getAbsolutePath();
 
         //filePath = data.getDataString();
-        //pathTV.setText(filePath);
+        filePathTV.setText(filePath);
 
 
 
         super.onActivityResult(requestCode, resultCode, data);
     }
-    private void iterateList(Context context, Uri uri) throws FileNotFoundException {
-
+    private void saveToList(Context context, Uri uri) throws FileNotFoundException {
         InputStream inStream;
-//
         inStream = context.getContentResolver().openInputStream(uri);
         try {
             wb = new XSSFWorkbook(inStream);
@@ -228,26 +243,35 @@ public class MainActivity extends AppCompatActivity {
         }
         sh = wb.getSheetAt(0);
         int rowNum = sh.getLastRowNum();
-
-        //Log.d("asd:", ""+rowNum);
-        //long x = 0;
-        //dbHalp.clearStudentTable();
+        qrList = new ArrayList<String>();
         for (int q = 1 ; q <= rowNum ; q++) {
-            QrPlainTxt = "" + "" + (int) Double.parseDouble(sh.getRow(q).getCell(0).toString());
+            qrList.add("" + (int) Double.parseDouble(sh.getRow(q).getCell(0).toString()));
+        }
+        Toast.makeText(MainActivity.this, "File selected with " + rowNum + " rows of data", Toast.LENGTH_SHORT).show();
+        QrPlainTxt = qrList.get(0);
+        genQR(qrList.get(0));
+        saveToGallery();
+    }
+    private void iterateList(){
+
+        for (int q = 1 ; q < qrList.size() ; q++) {
+            QrPlainTxt = qrList.get(q);
+            w=q;
             qrTxt.setText(QrPlainTxt);
-//            Handler handler = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    qrTxt.setText(QrPlainTxt);
-//                }
-//            }, 500);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    QrPlainTxt = qrList.get(w);
+                    qrTxt.setText(QrPlainTxt);
+                }
+            }, 1000);
             genQR(QrPlainTxt);
 
             saveToGallery();
         }
 
-        Toast.makeText(MainActivity.this, "Successfully generated " + rowNum + " QR code images", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Successfully generated " + qrList.size() + " QR code images", Toast.LENGTH_SHORT).show();
 
 
     }
