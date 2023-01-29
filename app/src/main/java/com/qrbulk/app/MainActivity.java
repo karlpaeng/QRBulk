@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     Button genBtn, saveBtn;
     ConstraintLayout cl;
     TextView qrTxt;
-asdasd
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);// no dark mode
