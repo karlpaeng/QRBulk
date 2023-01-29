@@ -1,2 +1,2 @@
 # QRBulk
- Simple QR Code Generator
+ Simple QR Code Image Generator
