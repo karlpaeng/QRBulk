@@ -33,9 +33,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    EditText editText;
     ImageView imageView;
-    Button genBtn, saveBtn;
+    Button selFileBtn, genBtn;
     ConstraintLayout cl;
     TextView qrTxt;
 
@@ -50,28 +49,29 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         }, PackageManager.PERMISSION_GRANTED);
 
-        editText = findViewById(R.id.textEt);
+
         imageView = findViewById(R.id.imageView);
-        genBtn = findViewById(R.id.genBtn);
-        saveBtn = findViewById(R.id.saveBtn);
+        selFileBtn = findViewById(R.id.selFileBtn);
+        genBtn = findViewById(R.id.genFileBtn);
         cl = findViewById(R.id.qrLayout);
         qrTxt = findViewById(R.id.qrPlainTxt);
 
-        genBtn.setOnClickListener(new View.OnClickListener() {
+        selFileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(editText.getText().toString().equals("")){
-                    Toast.makeText(MainActivity.this, "Please enter text first", Toast.LENGTH_SHORT).show();
-
-                }else {
-
-                    qrTxt.setText(editText.getText().toString());
-                    genQR(editText.getText().toString());
-                }
+                //open file manager
+//                if(editText.getText().toString().equals("")){
+//                    Toast.makeText(MainActivity.this, "Please enter text first", Toast.LENGTH_SHORT).show();
+//
+//                }else {
+//
+//                    qrTxt.setText(editText.getText().toString());
+//                    genQR(editText.getText().toString());
+//                }
 
             }
         });
-        saveBtn.setOnClickListener(new View.OnClickListener() {
+        genBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(qrTxt.getText().toString().equals("")){
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             Bitmap bitmap = encoder.createBitmap(matrix);
             imageView.setImageBitmap(bitmap);
             InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            manager.hideSoftInputFromWindow(editText.getApplicationWindowToken(), 0);
+            //manager.hideSoftInputFromWindow(editText.getApplicationWindowToken(), 0);
 
         }catch (Exception e){
             e.printStackTrace();

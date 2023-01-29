@@ -7,33 +7,22 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/genBtn"
+        android:id="@+id/selFileBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Generate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textEt" />
-
-    <EditText
-        android:id="@+id/textEt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="Enter Text"
-        android:inputType="textPersonName"
+        android:layout_marginTop="70dp"
+        android:text="Select File"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <Button
-        android:id="@+id/saveBtn"
+        android:id="@+id/genFileBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Save"
+        android:text="Generate Files"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qrLayout" />
@@ -49,7 +38,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="5dp"
         android:textSize="14dp"
-        app:layout_constraintTop_toBottomOf="@+id/genBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/selFileBtn" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/qrLayout"
